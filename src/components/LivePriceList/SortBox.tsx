@@ -1,5 +1,4 @@
 import {
-  Box,
   FormControl,
   InputLabel,
   MenuItem,
@@ -48,25 +47,14 @@ export const SortBox = ({ sort, onSort }: SortBoxPropsType): JSX.Element => {
           borderRadius: "8px",
           pl: 1,
           height: "100%",
-
-          // fieldset: {
-          //   border: "none",
-          // },
         }}
-        //   renderValue={(item) => (
-        //     <Box sx={{ color: palette.text.primary, pr: { md: 6, xs: 3.25 } }}>
-        //       <Typography component="span" variant="body2">
-        //         {currenciesName[item.toUpperCase()]?.market}
-        //       </Typography>
-        //     </Box>
-        //   )}
       >
-        <MenuItem value={0}>
+        <MenuItem value={1}>
           <Typography component="span" variant="body1">
             کمترین قیمت
           </Typography>
         </MenuItem>
-        <MenuItem value={1}>
+        <MenuItem value={2}>
           <Typography component="span" variant="body1">
             بیشترین قیمت
           </Typography>

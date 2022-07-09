@@ -15,6 +15,7 @@ import Image from "next/image";
 import { PriceTableRowPropsType } from "./types";
 import { fontFamily } from "../../constants/theme/typography";
 import Chart from "./Chart";
+import { roundNumber } from "../../utils/numbers";
 export const PriceTableRow = ({
   data,
   loadMore,
@@ -22,19 +23,7 @@ export const PriceTableRow = ({
   prices,
   index,
 }: PriceTableRowPropsType): JSX.Element => {
-  const {
-    id,
-    icon,
-    faName,
-    enName,
-    coin,
-    price,
-    quote,
-    percent,
-    decimal,
-    isFavorite,
-    chart,
-  } = data;
+  const { id, icon, faName, enName, coin, price, quote, percent, chart } = data;
   const { palette } = useTheme();
   const getPercentColor = React.useCallback(() => {
     if (percent > 0) return palette.success.main;
@@ -43,7 +32,7 @@ export const PriceTableRow = ({
   }, [percent]);
   const getChartColor = React.useCallback(() => {
     if (percent >= 0) return palette.success.main;
-    if (percent < 0) return palette.error.main;
+    return palette.error.main;
   }, [percent]);
   const getPercentIcon = React.useCallback(() => {
     if (percent > 0) return <ArrowDropUpIcon />;
@@ -59,16 +48,27 @@ export const PriceTableRow = ({
     [showPriceInToman]
   );
   const transformedSellPrice = React.useMemo(
-    () => (showPriceInToman ? price * (prices?.sell ?? 0) : quote),
+    () =>
+      showPriceInToman
+        ? roundNumber(price * (prices?.sell ?? 0))
+        : roundNumber(quote),
     [showPriceInToman]
   );
   const transformedBuyPrice = React.useMemo(
-    () => (showPriceInToman ? price * (prices?.buy ?? 0) : price),
+    () =>
+      showPriceInToman
+        ? roundNumber(price * (prices?.buy ?? 0))
+        : roundNumber(price),
     [showPriceInToman]
   );
 
   return (
-    <TableRow sx={{ textAlign: "center" }}>
+    <TableRow
+      sx={{
+        textAlign: "center",
+        td: { borderColor: palette.divider },
+      }}
+    >
       <TableCell>
         <IconButton
           sx={{
@@ -88,7 +88,11 @@ export const PriceTableRow = ({
             color: getPercentColor(),
           }}
         >
-          <Typography component="span" variant="body1">
+          <Typography
+            component="span"
+            variant="body1"
+            style={{ direction: "ltr" }}
+          >
             {percent}
           </Typography>
           {getPercentIcon()}

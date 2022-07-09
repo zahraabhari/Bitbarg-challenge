@@ -9,7 +9,7 @@ import styles from "../styles/Home.module.css";
 const Home: NextPage = ({ initialData, hasError }: any) => {
   const { palette } = useTheme();
   return (
-    <Box sx={{ backgroundColor: palette.neutral[200], py: 4 }}>
+    <Box sx={{ backgroundColor: palette.neutral[200], py: 4, height: "100vh" }}>
       <LivePriceList initialData={initialData} hasError={hasError} />
     </Box>
   );

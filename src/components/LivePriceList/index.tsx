@@ -1,30 +1,6 @@
 import * as React from "react";
-import {
-  Container,
-  Box,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  Typography,
-  TableBody,
-  InputAdornment,
-  useTheme,
-  TextField,
-  Button,
-  Select,
-  MenuItem,
-  ListItemSecondaryAction,
-  Paper,
-  Grid,
-  ToggleButtonGroup,
-  ToggleButton,
-} from "@mui/material";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
+import { Container, Box, Typography, useTheme } from "@mui/material";
 import { LivePricePropsType } from "./types";
-import livePriceData from "./livePrice.json";
-import Image from "next/image";
 import {
   fetchLivePrice,
   LivePriceInput,
@@ -32,11 +8,9 @@ import {
   PaginateHelper as PaginateHelperType,
   Prices as PricesType,
 } from "../../api/currencies";
-import { SearchBox } from "./SearchBox";
-import { JavascriptRounded } from "@mui/icons-material";
-import { PriceTableRow } from "./PriceTableRow";
-import { SortBox } from "./SortBox";
 import { fontFamily } from "../../constants/theme/typography";
+import { LivePriceTable } from "./LivePriceTable";
+import { Toolbar } from "./Toolbar";
 
 const LivePriceList = ({
   initialData,
@@ -95,10 +69,6 @@ const LivePriceList = ({
     },
     [Params]
   );
-  const priceUnit = React.useMemo(
-    () => (ShowPriceInToman ? "تومان" : "USDT"),
-    [ShowPriceInToman]
-  );
 
   React.useEffect(() => {
     const body = document.body;
@@ -155,166 +125,19 @@ const LivePriceList = ({
             296 ارز دیجیتال
           </Typography>
         </Box>
-        <Grid
-          container
-          columnSpacing={4}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            height: "48px",
-            " > *": {
-              height: "100%",
-            },
-          }}
-        >
-          <Grid item md={4}>
-            <SearchBox
-              search={Params.q ?? ""}
-              onSearch={(q: string) => handleSortSearch({ q })}
-            />
-          </Grid>
-          <Grid item md={2}>
-            <Button
-              variant="outlined"
-              startIcon={<StarBorderIcon />}
-              sx={{
-                p: 1,
-                width: "100%",
-                borderRadius: "8px",
-                borderColor: palette.divider,
-                color: palette.text.primary,
-                "&:hover": {
-                  backgroundColor: palette.neutral[100],
-                  borderColor: palette.divider,
-                },
-              }}
-            >
-              <Typography component="span" variant="body1">
-                {" "}
-                نشان شده‌ها
-              </Typography>
-            </Button>
-          </Grid>
-          <Grid item md={2}>
-            <SortBox
-              sort={Params.sort}
-              onSort={(sort: number) => handleSortSearch({ sort })}
-            />
-          </Grid>
-          <Grid item md={4}>
-            <ToggleButtonGroup
-              sx={{
-                width: "100%",
-                height: "100%",
-                border: "1px solid " + palette.neutral[300],
-                borderRadius: "8px",
-              }}
-              color="primary"
-              exclusive
-              value={ShowPriceInToman}
-              onChange={(e, value) => setShowPriceInToman(value)}
-            >
-              <ToggleButton
-                sx={{
-                  width: "100%",
-                  border: "unset",
-                  m: 0.5,
-                  borderRadius: "8px !important",
-                  color: palette.text.primary,
-                }}
-                value={true}
-              >
-                <Typography component="span" variant="body1">
-                  تومان
-                </Typography>
-              </ToggleButton>
-              <ToggleButton
-                sx={{
-                  width: "100%",
-                  border: "unset",
-                  m: 0.5,
-                  color: palette.text.primary,
-                }}
-                value={false}
-              >
-                <Typography component="span" variant="body1">
-                  تتر
-                </Typography>
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Grid>
-        </Grid>
-        <TableContainer component={Paper} sx={{ boxShadow: "none" }}>
-          <Table>
-            <TableHead sx={{ backgroundColor: palette.neutral[50], px: 3 }}>
-              <TableRow>
-                {ShowPriceInToman ? (
-                  <>
-                    {livePriceData.tableHeaderToman.map(({ title }, index) => (
-                      <TableCell
-                        key={index}
-                        sx={{
-                          textAlign: "center",
-                          "&:first-child": { pl: 5 },
-                          "&:last-child": { textAlign: "end", pr: 5 },
-                        }}
-                      >
-                        <Typography component="span" variant="body1">
-                          {title}
-                        </Typography>
-                      </TableCell>
-                    ))}
-                  </>
-                ) : (
-                  <>
-                    {livePriceData.tableHeaderTether.map(({ title }, index) => (
-                      <TableCell key={index} sx={{ textAlign: "center" }}>
-                        <Typography component="span" variant="body1">
-                          {title}
-                        </Typography>
-                      </TableCell>
-                    ))}
-                  </>
-                )}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {Items.map((item, index) => (
-                <PriceTableRow
-                  key={index}
-                  data={item}
-                  loadMore={loadMore}
-                  showPriceInToman={ShowPriceInToman}
-                  prices={Prices}
-                  index={index}
-                />
-              ))}
-            </TableBody>
-          </Table>
-          {Items.length === 0 && !Loading && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                mt: 3,
-                justifyContent: "center",
-              }}
-            >
-              <Image
-                src="/assets/images/not-found.svg"
-                width={256}
-                height={208}
-              />
-              <Typography
-                component="span"
-                variant="body1"
-                sx={{ textAlign: "center" }}
-              >
-                چیزی یافت نشد
-              </Typography>
-            </Box>
-          )}
-        </TableContainer>
+        <Toolbar
+          params={Params}
+          onSortSearch={handleSortSearch}
+          showPriceInToman={ShowPriceInToman}
+          setShowPriceInToman={setShowPriceInToman}
+        />
+        <LivePriceTable
+          items={Items}
+          loadMore={loadMore}
+          showPriceInToman={ShowPriceInToman}
+          prices={Prices}
+          loading={Loading}
+        />
       </Box>
     </Container>
   );

@@ -1,4 +1,9 @@
-import { LivePriceType, PaginateHelper, Prices } from "../../api/currencies";
+import {
+  LivePriceInput,
+  LivePriceType,
+  PaginateHelper,
+  Prices,
+} from "../../api/currencies";
 
 export interface LivePricePropsType {
   initialData?: {
@@ -10,6 +15,12 @@ export interface LivePricePropsType {
   hasError?: boolean;
 }
 
+export interface ToolbarPropsType {
+  onSortSearch: (params: LivePriceInput) => void;
+  params: LivePriceInput;
+  showPriceInToman: boolean;
+  setShowPriceInToman: (value: boolean) => void;
+}
 export interface SearchBoxPropsType {
   search: string;
   onSearch: (search: string) => void;
@@ -24,4 +35,11 @@ export interface PriceTableRowPropsType {
   showPriceInToman: boolean;
   prices?: Prices;
   index: number;
+}
+export interface LivePriceTablePropsType {
+  items: LivePriceType[];
+  loadMore: () => void;
+  showPriceInToman: boolean;
+  prices?: Prices;
+  loading: boolean;
 }

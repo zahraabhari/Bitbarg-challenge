@@ -31,9 +31,7 @@ export const SearchBox = ({
         InputProps={{
           classes: { notchedOutline: "outline" },
           sx: {
-            // border: "unset",
             color: palette.text.secondary,
-            // ".outline": { border: "none" },
             py: 0,
             px: 3,
             height: "100%",
